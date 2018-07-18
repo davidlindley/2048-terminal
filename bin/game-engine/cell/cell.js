@@ -1,3 +1,6 @@
+import chalk from 'chalk';
+import config from './config';
+
 export default class Cell {
   constructor(value = '') {
     this.value = value;
@@ -6,6 +9,17 @@ export default class Cell {
       this.doubleNumber = this.value * 2;
     }
     this.modified = false;
+  }
+
+  toString() {
+    if (this.isEmpty()) {
+      return this.value;
+    }
+    if (config.hasOwnProperty(this.value)) {
+      return chalk.bold.white.bgHex(config[this.value])(`   ${this.value}    `);
+    } else {
+      return chalk.bold.white.bgHex(config[2048])(`   ${this.value}    `);
+    }
   }
 
   /**

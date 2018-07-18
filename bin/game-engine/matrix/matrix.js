@@ -5,10 +5,11 @@ import hash from 'object-hash';
 export default class Matrix {
 
   gameSize = 4;
+  cellWidth = 10;
   matrix = {};
   previousHash = '';
 
-  constructor(gameSize = 4) {
+  constructor(gameSize = 4, cellWidth = 10) {
     this.gameSize = gameSize;
     // Initliase the matrix
     for (let x = 0; x < this.gameSize; x++) {
@@ -109,7 +110,7 @@ export default class Matrix {
     for (let y = 0; y < this.gameSize; y++) {
       let row = [];
       for (let x = 0; x < this.gameSize; x++) {
-        row.push(this.getCell(x, y).getValue());
+        row.push(this.getCell(x, y).toString());
       }
       toPrint.push(row);
     }

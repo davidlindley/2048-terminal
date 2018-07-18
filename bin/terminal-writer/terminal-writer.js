@@ -2,16 +2,22 @@ import Table from 'cli-table2';
 import clear from 'clear';
 import chalk from 'chalk';
 
-export default new class TerminalWriter {
-  colWidth = 10;
+export default class TerminalWriter {
+  cellWidth = 10;
   tableOpts = {
-    colWidths: [this.colWidth, this.colWidth, this.colWidth, this.colWidth],
+    colWidths: [this.cellWidth, this.cellWidth, this.cellWidth, this.cellWidth],
     chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
       , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
       , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
       , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
     colAligns: ['center', 'center', 'center', 'center']
   };
+
+  constructor(gameSize, cellWidth = 10) {
+    this.colWidth = cellWidth;
+    this.tableOpts.colWidths = new Array(gameSize).fill(this.cellWidth);
+    this.tableOpts.colAligns = new Array(gameSize).fill('center');
+  }
 
   /**
    * Writes the header, table, instructions and high score
@@ -45,6 +51,7 @@ export default new class TerminalWriter {
   _printInstructions() {
     this._blankLine();
     console.log('Press arrow keys to move. 2 + 2 = 4. Reach 2048');
+    console.log('r - restart game');
   }
 
   /**

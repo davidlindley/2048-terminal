@@ -4,7 +4,11 @@ import Matrix from './matrix';
 
 export default new class GameEngine {
 
+  // How big the grid should be
   gameSize = 4;
+  cellWidth = 10;
+  // The cells sit within the matrix
+  matrix;
 
   /**
    * Sets up the game
@@ -15,55 +19,67 @@ export default new class GameEngine {
       { key: 'right', action: this.right },
       { key: 'left', action: this.left },
       { key: 'up', action: this.up},
-      { key: 'down', action: this.down });
-    this.matrix = new Matrix(4);
-    // Print initial state
-    this.print();
+      { key: 'down', action: this.down },
+      { key: 'r', action: this.restart });
+    this.terminalWriter = new TerminalWriter(this.gameSize, this.cellWidth);
+    this.restart();
   }
 
   /**
    * Prints to console
    */
   print() {
-    TerminalWriter.writeTable(this.matrix.convertToArray(), this.matrix.getMaxValue());
+    this.terminalWriter.writeTable(this.matrix.convertToArray(), this.matrix.getMaxValue());
     this.matrix.resetCells();
   }
+
+  /**
+   * Restarts the game
+   */
+  restart = () => {
+    this.matrix = new Matrix(this.gameSize, this.cellWidth);
+    this.print();
+  };
 
   /**
    * Left key pressed
    */
   left = () => {
-    this.processCells([0,3], [3,0], true);
-    this.matrix.addRandomCell();
-    this.print();
+    this.arrowKeyPress([0, this.gameSize - 1], [this.gameSize - 1,0], true);
   };
 
   /**
    * Right key pressed
    */
   right = () => {
-    this.processCells([3,0], [3,0], true);
-    this.matrix.addRandomCell();
-    this.print();
+    this.arrowKeyPress([this.gameSize - 1,0], [this.gameSize - 1,0], true);
   };
 
   /**
    * Up key pressed
    */
   up = () => {
-    this.processCells([3,0], [0,3], false);
-    this.matrix.addRandomCell();
-    this.print();
+    this.arrowKeyPress([this.gameSize - 1,0], [0,this.gameSize - 1], false);
   };
 
   /**
    * Down key pressed
    */
   down = () => {
-    this.processCells([3,0], [3,0], false);
+    this.arrowKeyPress([this.gameSize - 1,0], [this.gameSize - 1,0], false)
+  };
+
+  /**
+   * Handle the arrow keys and then add a random cell and print
+   * @param xRange
+   * @param yRange
+   * @param horizontal
+   */
+  arrowKeyPress(xRange, yRange, horizontal) {
+    this.processCells(xRange, yRange, horizontal);
     this.matrix.addRandomCell();
     this.print();
-  };
+  }
 
   /**
    * Gets the array of keys to loop through
