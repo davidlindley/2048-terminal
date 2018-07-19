@@ -74,11 +74,39 @@ export default new class GameEngine {
    * @param xRange
    * @param yRange
    * @param horizontal
+   * @param checkEndGame
    */
   arrowKeyPress(xRange, yRange, horizontal) {
     this.processCells(xRange, yRange, horizontal);
     this.matrix.addRandomCell();
     this.print();
+    // Check if now full
+    if (this.matrix.isFull()) {
+      if(this.isEndGame()) {
+        // Game has ended. Write the screen
+        this.terminalWriter.writeEndOfGame(this.matrix.convertToArray(), this.matrix.getMaxValue());
+      }
+    }
+  }
+
+  isEndGame() {
+    // Make a copy of the matrix
+    this.matrix.copyMatrix();
+    // Run through all the arrows to see the matrix is still full
+    // Down, up, right, left
+    this.processCells([this.gameSize - 1,0], [this.gameSize - 1,0], false);
+    this.processCells([this.gameSize - 1,0], [0,this.gameSize - 1], false);
+    this.processCells([this.gameSize - 1,0], [this.gameSize - 1,0], true);
+    this.processCells([0, this.gameSize - 1], [this.gameSize - 1,0], true);
+
+    // Check if if it still full
+    if(this.matrix.isFull()) {
+      // End game
+      return true;
+    }
+
+    this.matrix.restoreMatrix();
+    return false;
   }
 
   /**

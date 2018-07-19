@@ -1,5 +1,6 @@
 import Cell from '../cell';
 
+import cloneDeep from 'lodash/cloneDeep';
 import hash from 'object-hash';
 
 export default class Matrix {
@@ -7,17 +8,34 @@ export default class Matrix {
   gameSize = 4;
   cellWidth = 10;
   matrix = {};
+  oldMatrix = {};
   previousHash = '';
 
   constructor(gameSize = 4, cellWidth = 10) {
+    this.cellWidth = cellWidth;
     this.gameSize = gameSize;
-    // Initliase the matrix
+    // Initialise the matrix
     for (let x = 0; x < this.gameSize; x++) {
       for (let y = 0; y < this.gameSize; y++) {
         this.matrix[`${x}:${y}`] = new Cell();
       }
     }
     this.addRandomCell();
+  }
+
+  copyMatrix() {
+    this.oldMatrix = cloneDeep(this.matrix);
+  }
+
+  restoreMatrix() {
+    this.matrix = cloneDeep(this.oldMatrix);
+  }
+
+  isFull() {
+    const emptyCells = Object.keys(this.matrix).filter((cellKey) => {
+      return this.matrix[cellKey].isEmpty();
+    });
+    return emptyCells.length === 0;
   }
 
   /**
@@ -110,7 +128,7 @@ export default class Matrix {
     for (let y = 0; y < this.gameSize; y++) {
       let row = [];
       for (let x = 0; x < this.gameSize; x++) {
-        row.push(this.getCell(x, y).toString());
+        row.push(this.getCell(x, y).toString(this.cellWidth));
       }
       toPrint.push(row);
     }

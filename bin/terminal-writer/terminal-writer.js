@@ -10,11 +10,11 @@ export default class TerminalWriter {
       , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
       , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
       , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
-    colAligns: ['center', 'center', 'center', 'center']
+    colAligns: ['center', 'center', 'center', 'center'],
   };
 
   constructor(gameSize, cellWidth = 10) {
-    this.colWidth = cellWidth;
+    this.cellWidth = cellWidth + 1;
     this.tableOpts.colWidths = new Array(gameSize).fill(this.cellWidth);
     this.tableOpts.colAligns = new Array(gameSize).fill('center');
   }
@@ -31,6 +31,29 @@ export default class TerminalWriter {
     this._printTable(matrix);
     this._printInstructions();
     this._printHighScore(highScore);
+  }
+
+  /**
+   * Write the end of game screen
+   * @param matrix
+   * @param highScore
+   */
+  writeEndOfGame(matrix, highScore = 0) {
+    clear();
+    this._printHeader();
+    this._printTable(matrix);
+    this._printGameOver();
+    this._printHighScore(highScore);
+    console.log('Press r key to restart');
+  }
+
+  /**
+   * Prints the game over state
+   * @private
+   */
+  _printGameOver() {
+    this._blankLine();
+    console.log(chalk.red('----------     GAME OVER     ----------'));
   }
 
   /**

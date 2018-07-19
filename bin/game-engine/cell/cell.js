@@ -11,15 +11,27 @@ export default class Cell {
     this.modified = false;
   }
 
-  toString() {
+  toString(cellWidth = 10) {
     if (this.isEmpty()) {
       return this.value;
     }
     if (config.hasOwnProperty(this.value)) {
-      return chalk.bold.white.bgHex(config[this.value])(`   ${this.value}    `);
+      return chalk.bold.white.bgHex(config[this.value])(this._padCell(this.value, cellWidth));
     } else {
-      return chalk.bold.white.bgHex(config[2048])(`   ${this.value}    `);
+      return chalk.bold.white.bgHex(config[2048])(this._padCell(this.value, cellWidth));
     }
+  }
+
+  _padCell(value, width) {
+    const valueLength = `${value}`.length;
+    const paddingValue = Math.floor(((width - valueLength) - 1) / 2);
+    const padArray = new Array(paddingValue).fill(' ');
+    let returnStr =  `${padArray.join('')}${value}${padArray.join('')}`;
+    if (width !== (returnStr.length + 1)) {
+      // Fill the remainder
+      returnStr = `${returnStr}${new Array(width - (returnStr.length + 1)).fill(' ').join('')}`;
+    }
+    return returnStr;
   }
 
   /**

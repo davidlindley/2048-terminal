@@ -25,7 +25,9 @@ export default class KeyHandler {
       // Ensure we can still exit
       if (key && key.ctrl && key.name == 'c') process.exit();
       // Check if there is an action for the key
-      const action = this.actions.filter((action) => action.key === key.name);
+      const action = this.actions.filter((action) => {
+        return action.key === key.name;
+      });
       if (action.length) {
         action[0].action();
       }
