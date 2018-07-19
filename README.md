@@ -28,4 +28,3 @@ This application has been written as a bit of fun. There are some things that ne
 
 - Production build
 - Unit tests 
-- End state handling
