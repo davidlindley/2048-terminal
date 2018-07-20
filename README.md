@@ -9,6 +9,9 @@ By pressing the arrow keys (up, down, left, right) the number moves and will com
 `npm install` - Installs dependencies
 
 `npm start` - Starts the application in the terminal
+
+`npm run build` - Builds the app into build/app.js for distribution
+
 ### In game keys:
 - Exit - `ctrl + c`
 - Move up - `up`
@@ -26,5 +29,4 @@ The game has two end states:
 ## To do
 This application has been written as a bit of fun. There are some things that need to be done:
 
-- Production build
 - Unit tests 
